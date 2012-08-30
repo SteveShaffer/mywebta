@@ -1,0 +1,29 @@
+<h2>Week of {{ date }}</h2>
+
+<h3>Lesson Plans</h3>
+<table>
+  <tr><th>Grade</th><th>Day 1</th><th>Day 2</th><th>Day 3</th><th>Day 4</th></tr>
+  <tr ng-repeat="plan in plans">
+    <th>{{ plan.name }}</th>
+    <td ng-repeat="lesson in plan.lessons">
+      <input ng-model="lesson" />
+    </td>
+  </tr>
+</table>
+
+<h3>Schedule By Day</h3>
+<div class="span1" ng-repeat="day in days">
+  <h4>{{ day.title }}</h4>
+  
+</div>
+
+<h3>Schedule By Period</h3>
+<table>
+  <tr><th>Period</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th></tr>
+  <tr ng-repeat="period in periods">
+    <th>{{ period.name }}</th>
+    <td ng-repeat="day in days">
+      {{ getLesson(period) }} <!-- TODO: Finish cycling -->
+    </td>
+  </tr>
+</table>

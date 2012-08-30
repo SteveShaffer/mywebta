@@ -17,8 +17,13 @@
 import webapp2
 
 class MainHandler(webapp2.RequestHandler):
-    def get(self):
-        self.response.out.write('<a href="/app/index.html">App Here</a>')
+  def get(self):
+    self.response.out.write('<a href="/app/index.html">App Here</a>')
+        
+class LessonHandler(webapp2.RequestHandler):
+  def get(self, id):
+    self.response.out.write('test')
 
-app = webapp2.WSGIApplication([('/', MainHandler)],
-                              debug=True)
+app = webapp2.WSGIApplication([('/', MainHandler),
+                               ('/lessons/(.*)', LessonHandler)
+                              ], debug=True)
