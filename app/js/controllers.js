@@ -19,7 +19,7 @@ function LessonCtrl($scope, $routeParams, Lesson) {
   $scope.setDoc = function(docUrl) {
     console.debug('Attempting to setDoc to ' + docUrl);
     $scope.mainDocUrl = docUrl;
-  }
+  };
 }
 
 function WeekCtrl($scope, $route, $routeParams) {

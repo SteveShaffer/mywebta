@@ -35,8 +35,7 @@ class Week(db.Model):
   schedule = JsonProperty()
   
 class Lesson(db.Model):
-  #Parent: Class
+  #Parent: LessonFolder
+  owner = db.UserProperty(auto_current_user_add=True) #TODO: required=True
   name = db.StringProperty(required=True)
-  week = db.ReferenceProperty(Week)
-  day = db.IntegerProperty()
   attachments = JsonProperty()

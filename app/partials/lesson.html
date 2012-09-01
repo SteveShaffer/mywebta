@@ -1,21 +1,15 @@
 <div class="row-fluid">
   <div class="span3">
-    <h2>{{ lesson.title }}</h2>
-    
-    <h3>Details</h3>
-    <dl>
-      <dt>Class</dt>
-        <dd>{{ lesson.class }}</dd>
-      <dt>Week</dt>
-        <dd>{{ lesson.week }}</dd>
-      <dt>Day</dt>
-        <dd>{{ lesson.day }}</dd>
-    </dl>
+    <h2>{{ lesson.name }}</h2>
     
     <h3>Attachments</h3>
     <ol>
       <li ng-repeat="attachment in lesson.attachments"><a ng-click="setDoc(attachment.url)">{{ attachment.title }}</a></li>
     </ol>
+    <button ng-click="newDoc()">+ Add...</button><!--TODO: Write newDoc()-->
+    
+    <h3>Actions</h3>
+    <button ng-click="lesson.$save()">Save</button>
   </div>
   <div class="span9">
     <iframe ng-src="{{ mainDocUrl }}" style="width:100%;height:600px;"></iframe>
