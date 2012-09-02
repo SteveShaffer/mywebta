@@ -30,8 +30,8 @@ class GqlEncoder(json.JSONEncoder):
       output = {} 
       for field, value in properties: 
         output[field] = getattr(obj, field)
-      #output['id'] = obj.key().id() #Addition by @giscaddb
-      output['key'] = str(obj.key()) #Addition by @giscaddb
+      output['key'] = str(obj.key())
+      output['parent'] = str(obj.parent_key())
       return output 
 
     elif isinstance(obj, datetime.datetime): 

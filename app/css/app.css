@@ -27,9 +27,9 @@
 }
 */
 
-.navbar {
+/*.navbar {
   background-color: #68d;
-}
+}*/
 
 div[ng-view] {
   margin-top: 50px;

@@ -3,23 +3,28 @@
 /* Controllers */
 
 
-function MyCtrl1() {}
-MyCtrl1.$inject = [];
-
-
-function MyCtrl2() {
-}
-MyCtrl2.$inject = [];
-
-function LessonCtrl($scope, $routeParams, Lesson) {
+function LessonDetailCtrl($scope, $routeParams, Lesson) {
   $scope.lesson = Lesson.get({ lessonId: $routeParams.lessonId }, function(lesson) {
     $scope.mainDocUrl = lesson.attachments[0].url;
   });
   
   $scope.setDoc = function(docUrl) {
-    console.debug('Attempting to setDoc to ' + docUrl);
     $scope.mainDocUrl = docUrl;
   };
+}
+
+function LessonListCtrl($scope, Lesson, LessonFolder) {
+  $scope.lessons = Lesson.query();
+  $scope.folders = LessonFolder.query();
+}
+
+function StudentRandomCtrl($scope, $routeParams, RandomStudent) {
+  $scope.periodId = $routeParams.periodId
+  $scope.student = RandomStudent.get({ periodId: $scope.periodId });
+}
+
+function PeriodListCtrl($scope, Period) {
+  $scope.periods = Period.query();
 }
 
 function WeekCtrl($scope, $route, $routeParams) {

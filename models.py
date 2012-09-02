@@ -34,8 +34,21 @@ class Week(db.Model):
   #plan = JsonProperty() #Week is outside ancestor path?
   schedule = JsonProperty()
   
+class LessonFolder(db.Model):
+  #Parent: LessonFolder or Nothing
+  owner = db.UserProperty(auto_current_user_add=True) #TODO: required=True
+  name = db.StringProperty(required=True)
+  lessons = db.ListProperty(db.Key)
+  
 class Lesson(db.Model):
   #Parent: LessonFolder
   owner = db.UserProperty(auto_current_user_add=True) #TODO: required=True
   name = db.StringProperty(required=True)
   attachments = JsonProperty()
+  
+class Period(db.Model):
+  name = db.StringProperty(required=True)
+  
+class Student(db.Model):
+  name = db.StringProperty(required=True)
+  period = db.ReferenceProperty(Period)

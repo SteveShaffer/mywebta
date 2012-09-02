@@ -4,15 +4,26 @@
 // Declare app level module which depends on filters, and services
 angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives']).
   config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/view1', {templateUrl: 'partials/partial1.html', controller: MyCtrl1});
-    $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller: MyCtrl2});
     $routeProvider.when('/week/:year/:month/:day', {
       templateUrl: 'partials/week.html',
       controller: WeekCtrl
     });
-    $routeProvider.when('/lessons/:lessonId', {
-      templateUrl: 'partials/lesson.html',
-      controller: LessonCtrl
-    });
-    $routeProvider.otherwise({redirectTo: '/view1'});
+    $routeProvider
+      .when('/lessons/:lessonId', {
+        templateUrl: 'partials/lesson-detail.html',
+        controller: LessonDetailCtrl
+      })
+      .when('/lessons', {
+        templateUrl: 'partials/lesson-list.html',
+        controller: LessonListCtrl
+      })
+      .when('/periods/:periodId/students/random' ,{
+        templateUrl: 'partials/student-random.html',
+        controller: StudentRandomCtrl
+      })
+      .when('/periods', {
+        templateUrl: 'partials/period-list.html',
+        controller: PeriodListCtrl
+      })
+      .otherwise({redirectTo: '/periods'});
   }]);

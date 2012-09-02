@@ -1,0 +1,13 @@
+<div class="row-fluid">
+  <div class="span12">
+    <h2>Folders</h2>
+    <ul>
+      <li ng-repeat="folder in folders"><a href="#/lessonfolders/{{ folder.key }}">{{ folder.name }}</a></li>
+    </ul>
+    
+    <h2>Lessons</h2>
+    <ul>
+      <li ng-repeat="lesson in lessons"><a href="#/lessons/{{ lesson.key }}">{{ lesson.name }}</a></li>
+    </ul>
+  </div>
+</div>
