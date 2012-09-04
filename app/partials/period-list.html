@@ -1,13 +1,13 @@
 <div class="container">
-  <h2>Periods</h2>
+  <h2>Classes</h2>
   <table>
     <tr>
-      <th>Period</th>
+      <th>Class</th>
       <th>Random Student</th>
       <th>Batch-Add Students</th>
-      <th>Delete Period</th>
+      <th>Delete Class</th>
     </tr>
-    <tr ng-repeat="period in periods">
+    <tr ng-repeat="period in periods | orderBy:'name'">
       <td><a href="#/periods/{{ period.key }}">{{ period.name }}</a></td>
       <td><a class="btn" href="#/periods/{{ period.key }}/students/random"><i class="icon-random" /></a></</td>
       <td><a class="btn" href="#/periods/{{ period.key }}/students/batch"><i class="icon-plus" /></a></td>
