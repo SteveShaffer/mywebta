@@ -239,7 +239,7 @@ class ThingListHandler(JsonHandler):
 
 class LogoutHandler(webapp2.RequestHandler):
   def get(self):
-    url = users.create_logout_url('/app/index.html')
+    url = users.create_logout_url('/')
     self.redirect(url)
 
 app = webapp2.WSGIApplication([('/', MainHandler),
