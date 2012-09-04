@@ -34,3 +34,16 @@
 div[ng-view] {
   margin-top: 50px;
 }
+
+table {
+  margin: 20px;
+}
+
+th, td {
+  text-align: center;
+  padding: 10px 20px 10px 20px;
+}
+
+th {
+  border-bottom: solid thin;
+}

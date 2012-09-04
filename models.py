@@ -3,6 +3,13 @@
 import json
 
 from google.appengine.ext import db
+from google.appengine.api import users
+
+class MytaModel(db.Model):
+  name = db.StringProperty(required=True)
+  owner = db.UserProperty(required=True, auto_current_user_add=True)
+  def is_users(self):
+    return (self.owner == users.get_current_user())
 
 class JsonProperty(db.TextProperty):
   def validate(self, value):
@@ -46,9 +53,17 @@ class Lesson(db.Model):
   name = db.StringProperty(required=True)
   attachments = JsonProperty()
   
-class Period(db.Model):
-  name = db.StringProperty(required=True)
+class Period(MytaModel):
+  pass
   
-class Student(db.Model):
-  name = db.StringProperty(required=True)
+class Student(MytaModel):
   period = db.ReferenceProperty(Period)
+  
+class Type(db.Model):
+  name = db.StringProperty(required=True)
+  attributes = db.BlobProperty()
+  
+class Thing(db.Model):
+  type = db.ReferenceProperty(Type)
+  name = db.StringProperty(required=True)
+  attributes = db.BlobProperty()

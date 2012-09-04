@@ -1,0 +1,7 @@
+<h2>Batch-Add Students for {{ period.name }}</h2>
+<form action="/students/batch" method="post">
+  <input type="hidden" name="period" value="{{ period.key }}" />
+  <p><label>Student Names</label><textarea name="names" /></p>
+  <p><em>Put each student's name on a separate line.</em><p>
+  <p><input type="submit" /><p>
+</form>

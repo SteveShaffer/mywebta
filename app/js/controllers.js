@@ -19,12 +19,32 @@ function LessonListCtrl($scope, Lesson, LessonFolder) {
 }
 
 function StudentRandomCtrl($scope, $routeParams, RandomStudent) {
-  $scope.periodId = $routeParams.periodId
+  $scope.periodId = $routeParams.periodId;
   $scope.student = RandomStudent.get({ periodId: $scope.periodId });
+}
+
+function StudentBatchCtrl($scope, $routeParams, Period) {
+  $scope.period = Period.get({ periodId: $routeParams.periodId });
 }
 
 function PeriodListCtrl($scope, Period) {
   $scope.periods = Period.query();
+  $scope.reloadPeriods = function() {
+    $scope.periods = Period.query();
+  }
+}
+
+function PeriodDetailCtrl($scope, $routeParams, Period, Student) {
+  $scope.period = Period.get({ periodId: $routeParams.periodId });
+  $scope.students = Student.query({ periodId: $routeParams.periodId });
+}
+
+function PeriodNewCtrl($scope, Period) {
+  $scope.period = new Period();
+  $scope.period.addNew = function() {
+    this.$save();
+    $('#add-alert').text(this.name + ' added.').removeClass('hide');
+  }
 }
 
 function WeekCtrl($scope, $route, $routeParams) {

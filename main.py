@@ -20,6 +20,7 @@ import json
 import random
 
 from google.appengine.api import users
+from google.appengine.ext import db
 
 import gaejson
 
@@ -30,125 +31,6 @@ import models
 class MainHandler(webapp2.RequestHandler):
   def get(self):
     self.response.out.write('<a href="/app/index.html">App Here</a>')
-
-#class LessonHandler(webapp2.RequestHandler):
-#  def return_json(self, object):
-#    data = gaejson.encode(object)
-#    self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-#    self.response.out.write(data)
-#    
-#  def get(self, arg=None):
-#    #TODO: Security
-#    user = users.get_current_user()
-#    if arg is None:
-#      #GET /lessons
-#      lessons = Lesson.all().fetch(100) #TODO: limit & paginate
-#    else:
-#      #GET /lessons/:keys
-#      keys = arg.split(',')
-#      lessons = Lesson.get(keys)
-#      if len(lessons) == 1:
-#        lessons = lessons[0]
-#    
-#    self.return_json(lessons)
-#    
-#  def post(self, key=None):
-#    #TODO: Security
-#    user = users.get_current_user()
-#    data = json.loads(self.request.body)
-#    
-#    if key is None:
-#      lesson = Lesson(name=data['name'])
-#    else:
-#      lesson = Lesson.get(key)
-#      
-#    for field, value in data.items():
-#      # TODO: All these special cases are results of the logic in gaejson.encode().  We should put together something to decode that output back into gae stuff
-#      
-#      # Keys are special!
-#      if field == 'key':
-#        if value != key:
-#          #TODO: Raise some sort of error.  You can write attributes to a URL without specifying the key, but if you pass a different key in the JSON than in the URL, that's cause for alarm
-#          pass
-#      else:
-#        # Users are special!
-#        if isinstance(getattr(lesson, field), users.User):
-#          email = value['email']
-#          auth_domain = value['auth_domain']
-#          value = users.User(email=email, _auth_domain=auth_domain)
-#          
-#        setattr(lesson, field, value)
-#      
-#    lesson.put()
-#    self.return_json(lesson)
-#    
-#  def delete(self, key):
-#    #TODO: Security
-#    user = users.get_current_user()
-#    lesson = Lesson.get(arg)
-#    lesson.delete()
-#    self.response.set_status(204)
-
-#class LessonFolderHandler(webapp2.RequestHandler):
-#  def return_json(self, object):
-#    data = gaejson.encode(object)
-#    self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-#    self.response.out.write(data)
-#    
-#  def get(self, arg=None):
-#    #TODO: Security
-#    user = users.get_current_user()
-#    if arg is None:
-#      #GET /lessonfolders
-#      folders = LessonFolder.all().fetch(100) #TODO: limit & paginate
-#    else:
-#      #GET /lessonfolders/:keys
-#      keys = arg.split(',')
-#      folders = LessonFolder.get(keys)
-#      if len(folders) == 1:
-#        folders = folders[0]
-#    
-#    self.return_json(folders)
-#    
-#  def post(self, key=None):
-#    #TODO: Security
-#    user = users.get_current_user()
-#    data = json.loads(self.request.body)
-#    
-#    if key is None:
-#      folder = LessonFolder(name=data['name'])
-#    else:
-#      folder = LessonFolder.get(key)
-#      
-#    for field, value in data.items():
-#      # TODO: All these special cases are results of the logic in gaejson.encode().  We should put together something to decode that output back into gae stuff
-#      
-#      # Keys are special!
-#      if field == 'key':
-#        if value != key:
-#          #TODO: Raise some sort of error.  You can write attributes to a URL without specifying the key, but if you pass a different key in the JSON than in the URL, that's cause for alarm
-#          pass
-#      elif field == 'parent':
-#        # Can't update parent
-#        pass
-#      else:
-#        # Users are special!
-#        if isinstance(getattr(folder, field), users.User):
-#          email = value['email']
-#          auth_domain = value['auth_domain']
-#          value = users.User(email=email, _auth_domain=auth_domain)
-#          
-#        setattr(folder, field, value)
-#      
-#    folder.put()
-#    self.return_json(folder)
-#    
-#  def delete(self, key):
-#    #TODO: Security
-#    user = users.get_current_user()
-#    folder = LessonFolder.get(key)
-#    folder.delete()
-#    self.response.set_status(204)
 
 class JsonHandler(webapp2.RequestHandler):
   """A generic handler for a JSON REST API handling CRUD operations on a single
@@ -187,6 +69,10 @@ class JsonHandler(webapp2.RequestHandler):
     data = gaejson.encode(object)
     self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
     self.response.out.write(data)
+    
+  def _return_forbidden(self):
+    self.response.out.set_status(403)
+    self.response.out.write('Your user account is not authorized to access this resource.')
   
   def _return_deleted(self):
     self.response.set_status(204)
@@ -194,19 +80,24 @@ class JsonHandler(webapp2.RequestHandler):
   def get(self, arg=None):
     user = users.get_current_user()
     if arg is None:
-      # GET /{object type} = READ
-      objects = self.model.all().fetch(100) #TODO: limit & paginate
+      # GET /{object type} = LIST
+      objects = self.model.all().filter('owner = ', user).fetch(100) #TODO: limit & paginate
     else:
-      # GET /{object type}/:key(s) = LIST
-      keys = arg.split(',')
-      objects = self.model.get(keys)
-      if len(objects) == 1:
-        objects = objects[0]
+      # GET /{object type}/:key(s) = READ
       
+      #TODO: Doesn't support multiple keys yet. Beginnings below.
+      #keys = arg.split(',')
+      #objects = self.model.get(keys)
+      #if len(objects) == 1:
+      #  objects = objects[0]
+      objects = self.model.get(arg)
+      
+      if not objects.is_users():
+        self._return_forbidden()
+    
     self._return_json(objects)
     
   def post(self, key=None):
-    #TODO: Security
     user = users.get_current_user()
     data = json.loads(self.request.body)
     
@@ -216,20 +107,25 @@ class JsonHandler(webapp2.RequestHandler):
     else:
       # POST /{object types}/:key = UPDATE
       object = self.model.get(key)
+      if not object.is_users():
+        self._return_forbidden()
       
     self._set_object_properties(object ,data)
-    
     object.put()
     self._return_json(object)
     
   def delete(self, arg):
     # POST /{object type}/:key(s) = DELETE
-    #TODO: Security
-    user = users.get_current_user()
-    keys = arg.split(',')
-    for key in keys:
-      self.model.get(key).delete()
-    self.response.set_status(204)
+    
+    #TODO: Doesn't support multiple keys yet. Beginnings below.
+    #keys = arg.split(',')
+    #db.delete(keys)
+    
+    object = self.model.get(arg)
+    if not object.is_users():
+      self._return_forbidden()
+    
+    self._return_deleted()
 
 class LessonHandler(JsonHandler):
   model = models.Lesson
@@ -240,8 +136,55 @@ class LessonFolderHandler(JsonHandler):
 class PeriodHandler(JsonHandler):
   model = models.Period
   
+  def delete(self, arg):
+    # POST /{object type}/:key(s) = DELETE
+    #TODO: Security
+    user = users.get_current_user()
+    keys = arg.split(',')
+    for key in keys:
+      period = self.model.get(key)
+      students = period.student_set
+      db.delete(students)
+      period.delete()
+    self.response.set_status(204)
+  
+class PeriodStudentHandler(JsonHandler):
+  
+  def get(self, periodKey):
+    period = models.Period.get(periodKey)
+    students = period.student_set.fetch(100) #TODO: 100-student limit here.
+    self._return_json(students)
+    
+  def post(self):
+    self.response.set_status(404)
+    
+  def delete(self):
+    self.response.set_status(404)
+  
 class StudentHandler(JsonHandler):
   model = models.Student
+  
+class BatchStudentHandler(JsonHandler):
+  model = models.Student
+  
+  def get(self):
+    self.response.set_status(404)
+  
+  def post(self):
+    periodKey = self.request.get('period')
+    period = models.Period.get(periodKey)
+    names = self.request.get('names').split('\n')
+    logging.info('names = ' + str(names))
+    students = []
+    for name in names:
+      student = models.Student(name=name, period=period)
+      student.put()
+      students.append(student)
+    #self._return_json(students)
+    self.redirect('/app/index.html#periods') #TODO: This is VERY inelegant
+    
+  def delete(self):
+    self.response.set_status(404)
   
 class RandomStudentHandler(JsonHandler):
   model = models.Student
@@ -260,6 +203,45 @@ class RandomStudentHandler(JsonHandler):
   def delete(self):
     pass
 
+class ThingHandler(JsonHandler):
+  def get(self, type_key, key):
+    thing = models.Thing.get(key)
+    self._return_json(thing)
+    #TODO: FINISH
+    
+  def post(self, type_key, key):
+    #TODO: Write
+    pass
+  
+  def delete(self, type_key, key):
+    #TODO: Write
+    pass
+  
+class ThingListHandler(JsonHandler):
+  def get(self, type_key):
+    #TODO: Support queries / security
+    type = models.Type.get(type_key)
+    things = models.Thing.all().filter('type = ', type).fetch(100) #TODO: paginate & limit
+    self._return_json(things)
+    
+  def post(self, type_key):
+    #TODO: Security
+    type = models.Type.get(type_key)
+    data = json.loads(self.request.body)
+    thing = models.Thing(type=type,name=data['name'])
+    self._set_object_properties(thing, data)
+    thing.put()
+    self._return_json(thing) #TODO: Need to redirect?
+    
+  def delete(self, type_key):
+    #TODO: Write
+    pass
+
+class LogoutHandler(webapp2.RequestHandler):
+  def get(self):
+    url = users.create_logout_url('/app/index.html')
+    self.redirect(url)
+
 app = webapp2.WSGIApplication([('/', MainHandler),
                                ('/lessons', LessonHandler),
                                ('/lessons/(.*)', LessonHandler),
@@ -267,6 +249,12 @@ app = webapp2.WSGIApplication([('/', MainHandler),
                                ('/lessonfolders/(.*)', LessonFolderHandler),
                                ('/periods', PeriodHandler),
                                ('/periods/(.*)/students/random', RandomStudentHandler),
+                               ('/periods/(.*)/students', PeriodStudentHandler),
+                               ('/periods/(.*)', PeriodHandler),
+                               ('/students/batch', BatchStudentHandler),
                                ('/students', StudentHandler),
-                               ('/students/(.*)', StudentHandler)
+                               ('/students/(.*)', StudentHandler),
+                               ('/logout', LogoutHandler),
+                               ('/(.*)/(.*)', ThingHandler),
+                               ('/(.*)', ThingListHandler)
                               ], debug=True)

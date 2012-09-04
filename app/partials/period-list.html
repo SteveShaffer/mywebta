@@ -1,12 +1,18 @@
-<div class="row-fluid">
-  <div class="span12">
-    <h2>Get a Random Student From...</h2>
-    <ul>
-      <li ng-repeat="period in periods">
-        <a href="#/periods/{{ period.key }}/students/random">
-          {{ period.name }}
-        </a>
-      </li>
-    </ul>
-  </div>
+<div class="container">
+  <h2>Periods</h2>
+  <table>
+    <tr>
+      <th>Period</th>
+      <th>Random Student</th>
+      <th>Batch-Add Students</th>
+      <th>Delete Period</th>
+    </tr>
+    <tr ng-repeat="period in periods">
+      <td><a href="#/periods/{{ period.key }}">{{ period.name }}</a></td>
+      <td><a class="btn" href="#/periods/{{ period.key }}/students/random"><i class="icon-random" /></a></</td>
+      <td><a class="btn" href="#/periods/{{ period.key }}/students/batch"><i class="icon-plus" /></a></td>
+      <td><a class="btn" ng-click="period.$remove();reloadPeriods()"><i class="icon-remove" /></a></td>
+    </tr>
+  </table>
+  <a class="btn" href="#periods/new"><i class="icon-plus-sign" /> Add Period</a>
 </div>

@@ -25,5 +25,17 @@ angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives'])
         templateUrl: 'partials/period-list.html',
         controller: PeriodListCtrl
       })
+      .when('/periods/:periodId/students/batch', {
+        templateUrl: 'partials/student-batch.html',
+        controller: StudentBatchCtrl
+      })
+      .when('/periods/new', {
+        templateUrl: 'partials/period-new.html',
+        controller: PeriodNewCtrl
+      })
+      .when('/periods/:periodId', {
+        templateUrl: 'partials/period-detail.html',
+        controller: PeriodDetailCtrl
+      })
       .otherwise({redirectTo: '/periods'});
   }]);
