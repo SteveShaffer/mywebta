@@ -30,7 +30,7 @@ import models
 
 class MainHandler(webapp2.RequestHandler):
   def get(self):
-    self.response.out.write('<a href="/app/index.html">App Here</a>')
+    self.redirect('/app/index.html')
 
 class JsonHandler(webapp2.RequestHandler):
   """A generic handler for a JSON REST API handling CRUD operations on a single

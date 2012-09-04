@@ -18,8 +18,9 @@ function LessonListCtrl($scope, Lesson, LessonFolder) {
   $scope.folders = LessonFolder.query();
 }
 
-function StudentRandomCtrl($scope, $routeParams, RandomStudent) {
+function StudentRandomCtrl($scope, $routeParams, Period, RandomStudent) {
   $scope.periodId = $routeParams.periodId;
+  $scope.period = Period.get({ periodId: $scope.periodId });
   $scope.student = RandomStudent.get({ periodId: $scope.periodId });
 }
 
