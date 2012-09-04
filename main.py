@@ -24,8 +24,6 @@ from google.appengine.ext import db
 
 import gaejson
 
-#from models import Lesson
-#from models import LessonFolder
 import models
 
 class MainHandler(webapp2.RequestHandler):
@@ -71,8 +69,11 @@ class JsonHandler(webapp2.RequestHandler):
     self.response.out.write(data)
     
   def _return_forbidden(self):
-    self.response.out.set_status(403)
+    self.response.set_status(403)
     self.response.out.write('Your user account is not authorized to access this resource.')
+    
+  def _return_not_found(self):
+    self.response.set_status(404)
   
   def _return_deleted(self):
     self.response.set_status(204)
@@ -156,10 +157,10 @@ class PeriodStudentHandler(JsonHandler):
     self._return_json(students)
     
   def post(self):
-    self.response.set_status(404)
+    self._return_not_found()
     
   def delete(self):
-    self.response.set_status(404)
+    self._return_not_found()
   
 class StudentHandler(JsonHandler):
   model = models.Student
@@ -168,7 +169,7 @@ class BatchStudentHandler(JsonHandler):
   model = models.Student
   
   def get(self):
-    self.response.set_status(404)
+    self._return_not_found()
   
   def post(self):
     periodKey = self.request.get('period')
@@ -184,7 +185,7 @@ class BatchStudentHandler(JsonHandler):
     self.redirect('/app/index.html#periods') #TODO: This is VERY inelegant
     
   def delete(self):
-    self.response.set_status(404)
+    self._return_not_found()
   
 class RandomStudentHandler(JsonHandler):
   model = models.Student
@@ -198,10 +199,10 @@ class RandomStudentHandler(JsonHandler):
     self._return_json(student)
     
   def post(self):
-    pass
+    self._return_not_found()
   
   def delete(self):
-    pass
+    self._return_not_found()
 
 class ThingHandler(JsonHandler):
   def get(self, type_key, key):
