@@ -1,7 +1,10 @@
 <div class="container">
   <h2>{{ period.name }}</h2>
   <h3>Students</h3>
-  <ul>
-    <li ng-repeat="student in students | orderBy:'name'">{{ student.name }}</li>
-  </ul>
+  <div ng-include="'partials/student-list.html'"></div>
+  <hr />
+  <p>
+    <a class="btn" href="#periods/{{ periodId }}/students/batch"><i class="icon-plus-sign" /> Add Students</a>
+    <a class="btn" href="#periods/{{ periodId }}/students/random"><i class="icon-refresh" /> Random Student</a>
+  </p>
 </div>

@@ -1,0 +1,7 @@
+<ol>
+  <li ng-repeat="student in students | orderBy:'name'" style="margin-bottom:9px;" ng-hide="student.deleted">
+    <input type="text" style="margin-bottom:0px;" ng-model="student.name" />
+    <a class="btn" ng-click="student.$save()">Save</a>
+    <a class="btn" ng-click="student.$delete();reloadStudents()"><i class="icon-remove" /></a>
+  </li>
+</ol>

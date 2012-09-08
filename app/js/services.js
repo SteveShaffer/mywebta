@@ -11,7 +11,7 @@ angular.module('myApp.services', ['ngResource'])
     return $resource('/lessonfolders/:key', {key: '@key'})
   })
   .factory('Student', function($resource) {
-    return $resource('/periods/:periodId/students/:studentId', {periodId: '@period', studentId: '@key'})
+    return $resource('/periods/:periodId/students/:studentId', {periodId: '@period.key', studentId: '@key'})
   })
   .factory('RandomStudent', function($resource) {
     return $resource('/periods/:periodId/students/random', {periodId: '@period'})

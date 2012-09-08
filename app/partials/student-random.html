@@ -1,10 +1,10 @@
 <div class="container">
-  <h2>{{ period.name }}</h2>
+  <h2><a href="#periods/{{ period.key }}">{{ period.name }}</a></h2>
   <div class="hero-unit well" style="text-align:center">
     <em>and the winner is...</em>
     <h1>{{ student.name }}</h1>
     <br />
     <br />
-    <p><a class="btn btn-primary btn-large" onclick="window.location.reload()">Another From {{ period.name }}</a></p><!--TODO: Make a more elegant reload-->
+    <p><a class="btn btn-primary btn-large" onclick="window.location.reload()"><i class="icon-repeat" /> Another From {{ period.name }}</a></p><!--TODO: Make a more elegant reload-->
   </div>
 </div>

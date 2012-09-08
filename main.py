@@ -125,7 +125,7 @@ class JsonHandler(webapp2.RequestHandler):
     object = self.model.get(arg)
     if not object.is_users():
       self._return_forbidden()
-    
+    object.delete()
     self._return_deleted()
 
 class LessonHandler(JsonHandler):
@@ -165,6 +165,29 @@ class PeriodStudentHandler(JsonHandler):
 class StudentHandler(JsonHandler):
   model = models.Student
   
+  def _set_object_properties(self, object, data):
+    for field, value in data.items():
+      
+      # Keys are special!
+      if field == 'key':
+        if value != str(object.key()):
+          #TODO: Raise some sort of error.  You can write attributes to a URL without specifying the key, but if you pass a different key in the JSON than in the URL, that's cause for alarm
+          pass
+      elif field == 'parent':
+        # Can't update parent
+        pass
+      elif field == 'period':
+        # Ignore this
+        pass
+      else:
+        # Users are special!
+        if isinstance(getattr(object, field), users.User):
+          email = value['email']
+          auth_domain = value['auth_domain']
+          value = users.User(email=email, _auth_domain=auth_domain)
+          
+        setattr(object, field, value)
+  
 class BatchStudentHandler(JsonHandler):
   model = models.Student
   
@@ -182,7 +205,7 @@ class BatchStudentHandler(JsonHandler):
       student.put()
       students.append(student)
     #self._return_json(students)
-    self.redirect('/app/index.html#periods') #TODO: This is VERY inelegant
+    self.redirect('/app/index.html#periods/' + periodKey) #TODO: This is VERY inelegant
     
   def delete(self):
     self._return_not_found()
@@ -250,6 +273,7 @@ app = webapp2.WSGIApplication([('/', MainHandler),
                                ('/lessonfolders/(.*)', LessonFolderHandler),
                                ('/periods', PeriodHandler),
                                ('/periods/(.*)/students/random', RandomStudentHandler),
+                               ('/periods/.*/students/(.*)', StudentHandler),
                                ('/periods/(.*)/students', PeriodStudentHandler),
                                ('/periods/(.*)', PeriodHandler),
                                ('/students/batch', BatchStudentHandler),

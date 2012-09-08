@@ -47,3 +47,7 @@ th, td {
 th {
   border-bottom: solid thin;
 }
+
+input {
+  margin-bottom: 0;
+}

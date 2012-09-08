@@ -31,13 +31,17 @@ function StudentBatchCtrl($scope, $routeParams, Period) {
 function PeriodListCtrl($scope, Period) {
   $scope.periods = Period.query();
   $scope.reloadPeriods = function() {
-    $scope.periods = Period.query();
+    $scope.periods = Period.query(); //TODO: this is terrible!
   }
 }
 
 function PeriodDetailCtrl($scope, $routeParams, Period, Student) {
-  $scope.period = Period.get({ periodId: $routeParams.periodId });
-  $scope.students = Student.query({ periodId: $routeParams.periodId });
+  $scope.periodId = $routeParams.periodId;
+  $scope.period = Period.get({ periodId: $scope.periodId });
+  $scope.students = Student.query({ periodId: $scope.periodId });
+  $scope.reloadStudents = function() {
+    $scope.students = Student.query({ periodId: $scope.periodId}); //TODO: this is terrible!
+  }
 }
 
 function PeriodNewCtrl($scope, Period) {
