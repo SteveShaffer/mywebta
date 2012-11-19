@@ -37,5 +37,9 @@ angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives'])
         templateUrl: 'partials/period-detail.html',
         controller: PeriodDetailCtrl
       })
+      .when('/hotpotato', {
+        templateUrl: 'partials/hotpotato.html',
+        controller: HotpotatoCtrl
+      })
       .otherwise({redirectTo: '/periods'});
   }]);

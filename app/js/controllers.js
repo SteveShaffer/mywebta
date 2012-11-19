@@ -52,6 +52,40 @@ function PeriodNewCtrl($scope, Period) {
   }
 }
 
+function HotpotatoCtrl($scope, $log) {
+  $scope.averageTime = 40;
+  $scope.imageId = 0;
+  var maxImage = 4; //ID of max image.  So if you have 5 images numbered 0-4, this would be 4.
+  
+  function incrementImage() {
+    $scope.imageId += 1;
+    $('#potato-pic').attr('src','img/potato/' + $scope.imageId + '.jpg'); //TODO: Why am I even using angular if this can't be dynamic?
+    $log.log('Incrementing image to ' + $scope.imageId + '.  Setting timer for ' + $scope.changeTimes[$scope.imageId]);
+    if ($scope.imageId == maxImage) {
+      document.getElementById('explosion-sound').play();
+      $('#song-video').attr('src','');
+      
+    } else {
+      setTimeout(function(){incrementImage()},$scope.changeTimes[$scope.imageId]); //TODO: should be using $scope.changeTimes.pop() probably.
+    }
+  }
+  
+  $scope.timerGo = function() {
+    $scope.imageId = 0;
+    $scope.changeTimes = [];
+    $('#song-video').attr('src','http://www.youtube.com/embed/FV6nJxg7mM0?autoplay=1');
+    for (var i=0; i<maxImage; i++) {
+      $scope.changeTimes.push( (0.5+(1*Math.random())) * $scope.averageTime*1000 / maxImage )
+    }
+    $scope.timerRef = setTimeout(function(){incrementImage()}, $scope.changeTimes[0]);
+    $log.log('Kicked off timer.');
+  };
+  
+  $scope.toggleOptions = function() { //TODO: There's some angular thing with ng-show I should be doing instead
+    $('#optShowButton').toggle();
+    $('#options').toggle();
+  }
+}
 function WeekCtrl($scope, $route, $routeParams) {
   $scope.params = $routeParams;
   $scope.date = $routeParams.month + '/' + $routeParams.day + '/' + $routeParams.year;

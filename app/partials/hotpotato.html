@@ -1,0 +1,19 @@
+<div class="center" style="width:600px">
+  <div class="grounded">  
+    <img class="center" style="margin-bottom:10px" id="potato-pic" ng-src="img/potato/{{ imageId }}.jpg" ng-init="timerGo()" />
+  </div>
+</div>
+<!--div class="left grounded">
+  <div id="optShowButton">
+    <button class="btn" onclick="$('#optShowButton').toggle();$('#options').toggle();">Set Time</button>
+  </div>
+  <div id="options" style="display:none">
+    <input type="text" ng-model="averageTime" />
+    <button class="btn" onclick="$('#optShowButton').toggle();$('#options').toggle();">Done</button>
+  </div>
+</div-->
+<div class="right grounded">
+  <iframe id="song-video" width="200" height="150" src="" frameborder="0" allowfullscreen></iframe>
+</div>
+<a class="btn btn-primary btn-large" onclick="window.location.reload()"><i class="icon-repeat" /> Again!</a>
+<audio id="explosion-sound" src="img/potato/explosion.wav" preload="auto" />
