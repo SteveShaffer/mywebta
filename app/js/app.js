@@ -41,5 +41,17 @@ angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives'])
         templateUrl: 'partials/hotpotato.html',
         controller: HotpotatoCtrl
       })
+      .when('/tests', {
+        templateUrl: 'partials/test-list.html',
+        controller: TestListCtrl
+      })
+      .when('/tests/:testId/view', {
+        templateUrl: 'partials/test-view.html',
+        controller: TestViewCtrl
+      })
+      .when('/tests/new', {
+        templateUrl: 'partials/test-new.html',
+        controller: TestNewCtrl
+      })
       .otherwise({redirectTo: '/periods'});
   }]);

@@ -69,4 +69,15 @@ img.center {
   position: absolute;
   bottom: 0;
 }
+
+/* Test Styles */
+.test-header {
+  
+}
+.test-section {
+  
+}
+.test-section-header {
+  border-style: solid;
+  border-width: thin;
 }

@@ -1,0 +1,20 @@
+<div class="container">
+  <h2>Tests</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>View</th>
+        <th>Delete Test</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="test in tests | orderBy:'name'">
+        <td><a href="#/tests/{{ test.key }}">{{ test.name }}</a></td>
+        <td><a class="btn" href="#/tests/{{ test.key }}/view"><i class="icon-" /></a></td><!--TODO: icon-->
+        <td><a class="btn" ng-click="test.$remove();reloadTests()"><i class="icon-remove" /></a></td>
+      </tr>
+    </tbody>
+  </table>
+  <a class="btn" href="#tests/new"><i class="icon-plus-sign" /> Add Test</a>
+</div>

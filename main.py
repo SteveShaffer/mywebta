@@ -226,6 +226,9 @@ class RandomStudentHandler(JsonHandler):
   
   def delete(self):
     self._return_not_found()
+    
+class TestHandler(JsonHandler):
+  model = models.Test
 
 class ThingHandler(JsonHandler):
   def get(self, type_key, key):
@@ -279,6 +282,8 @@ app = webapp2.WSGIApplication([('/', MainHandler),
                                ('/students/batch', BatchStudentHandler),
                                ('/students', StudentHandler),
                                ('/students/(.*)', StudentHandler),
+                               ('/tests', TestHandler),
+                               ('/tests/(.*)', TestHandler),
                                ('/logout', LogoutHandler),
                                ('/(.*)/(.*)', ThingHandler),
                                ('/(.*)', ThingListHandler)

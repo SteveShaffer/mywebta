@@ -1,0 +1,27 @@
+<div id="test-header">
+  <!--TODO: Responsive is not working for the printout.  Need to move container-fluid into the partials so this can be just a container-->
+  <!--TODO: Header stuff goes here-->
+  <h2>{{ test.name }}</h2>
+</div>
+<hr>
+<div id="test-content">
+  <div class="test-section" ng-repeat="section in test.content.sections">
+    <div class="test-section-header">
+      <h3>Section {{ $index + 1 }} - {{ section.name }}</h3>
+      <p>{{ section.instructions }}</p>
+    </div>
+    <div class="test-question row-fluid" ng-repeat="question in section.questions">
+      <div class="test-question-text">
+        {{ $index + 1 }}. {{ question.text }}
+      </div>
+      <div class="test-answer row-fluid">
+        <div class="test-answer-choice span3" ng-repeat="answer in question.answers">
+          {{ $index + 1 | numberToLetter }}. {{ answer.text }}
+        </div>
+        <!--TODO: New Answer Choice-->
+      </div>
+    </div>
+    <!--TODO: New Question-->
+  </div>
+  <!--TODO: New Section-->
+</div>

@@ -86,6 +86,26 @@ function HotpotatoCtrl($scope, $log) {
     $('#options').toggle();
   }
 }
+
+function TestListCtrl($scope, Test) {
+  $scope.tests = Test.query();
+  $scope.reloadTests = function() {
+    $scope.tests = Test.query(); //TODO: this is terrible!
+  }
+}
+
+function TestViewCtrl($scope, $routeParams, Test) {
+  $scope.test = Test.get({ testId: $routeParams.testId });
+}
+
+function TestNewCtrl($scope, Test) {
+  $scope.test = new Test();
+  $scope.test.addNew = function() {
+    this.$save();
+    $('#add-alert').text(this.name + ' added.').removeClass('hide');
+  }
+}
+
 function WeekCtrl($scope, $route, $routeParams) {
   $scope.params = $routeParams;
   $scope.date = $routeParams.month + '/' + $routeParams.day + '/' + $routeParams.year;

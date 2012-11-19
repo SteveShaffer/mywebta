@@ -19,4 +19,7 @@ angular.module('myApp.services', ['ngResource'])
   .factory('Period', function($resource) {
     return $resource('/periods/:periodId', {periodId: '@key'})
   })
+  .factory('Test', function ($resource) {
+    return $resource('/tests/:testId', {testId: '@key'})
+  })
 ;

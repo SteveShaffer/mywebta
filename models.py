@@ -2,7 +2,7 @@
 
 import json
 
-from google.appengine.ext import db
+from google.appengine.ext import db #TODO: Use ndb
 from google.appengine.api import users
 
 class MytaModel(db.Model):
@@ -58,6 +58,9 @@ class Period(MytaModel):
   
 class Student(MytaModel):
   period = db.ReferenceProperty(Period)
+  
+class Test(MytaModel):
+  content = JsonProperty()
   
 class Type(db.Model):
   name = db.StringProperty(required=True)
